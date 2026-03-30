@@ -49,6 +49,12 @@ XSL renders content on page
 - **`program-config.js`** - Centralized configuration for pathways, types, hidden programs
 - **`program-directory.js`** - Directory page filtering, search, and pagination
 
+### Workforce Management (Upload to `/workforce/manage-programs/`)
+- **`index.html`** - SSO-protected management interface
+- **`save-program.php`** - Add/edit programs
+- **`get-programs.php`** - Retrieve program list
+- **`delete-program.php`** - Delete programs
+
 ### Configuration/Documentation
 - **`README.md`** - This file
 - **`QUICKSTART.md`** - 5-minute setup guide
@@ -374,6 +380,38 @@ fetch('/_resources-2025/php/program-list.php?v=7')  // Increment to v=8, v=9, et
 ```
 
 Increment version (v=8, v=9, etc.) to bypass cache after updates.
+
+## Workforce Program Management
+
+### Web Interface for Non-Catalog Programs
+
+Workforce programs don't exist in the CourseLeaf catalog, so they need a separate management system. The workforce management interface allows authorized users to add, edit, and delete workforce programs through a web form.
+
+### Features
+
+- **Add/Edit/Delete** - Simple form interface
+- **SSO Protected** - Secured by your existing authentication
+- **Category Support** - Programs organized by workforce category
+- **JSON Storage** - Simple file-based data storage
+- **Auto-Integration** - Programs automatically appear in directory
+
+### Setup
+
+1. Upload files to `/workforce/manage-programs/`:
+   ```
+   index.html
+   save-program.php
+   get-programs.php
+   delete-program.php
+   ```
+
+2. Set directory permissions for file creation
+
+3. Configure SSO protection for the directory
+
+4. Access at: `https://www.ccri.edu/workforce/manage-programs/`
+
+See `workforce/README.md` for complete setup and usage guide.
 
 ## Technical Notes
 
