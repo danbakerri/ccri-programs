@@ -43,6 +43,14 @@ if (file_exists($CACHE_FILE)) {
 
 // Return fresh cache
 if ($use_cache) {
+    $cache_minutes = round($cache_age / 60);
+    $cache_hours = round($cache_age / 3600, 1);
+    
+    // Add cache status to HTTP headers (not in JSON body)
+    header('X-Cache-Status: HIT');
+    header('X-Cache-Age-Minutes: ' . $cache_minutes);
+    header('X-Cache-Age-Hours: ' . $cache_hours);
+    
     echo file_get_contents($CACHE_FILE);
     exit;
 }
@@ -53,6 +61,15 @@ $catalog_xml = @file_get_contents($CATALOG_URL);
 // If fetch failed, try stale cache
 if ($catalog_xml === false) {
     if (file_exists($CACHE_FILE) && $cache_age < $STALE_CACHE_DURATION) {
+        $cache_hours = round($cache_age / 3600, 1);
+        $cache_days = round($cache_age / 86400, 1);
+        
+        // Add stale cache status to HTTP headers
+        header('X-Cache-Status: STALE');
+        header('X-Cache-Age-Hours: ' . $cache_hours);
+        header('X-Cache-Age-Days: ' . $cache_days);
+        header('X-Cache-Reason: Catalog-Unavailable');
+        
         echo file_get_contents($CACHE_FILE);
         exit;
     } else {
@@ -68,6 +85,15 @@ $xml = simplexml_load_string($catalog_xml);
 if ($xml === false) {
     // XML parsing failed, try stale cache
     if (file_exists($CACHE_FILE) && $cache_age < $STALE_CACHE_DURATION) {
+        $cache_hours = round($cache_age / 3600, 1);
+        $cache_days = round($cache_age / 86400, 1);
+        
+        // Add stale cache status to HTTP headers
+        header('X-Cache-Status: STALE');
+        header('X-Cache-Age-Hours: ' . $cache_hours);
+        header('X-Cache-Age-Days: ' . $cache_days);
+        header('X-Cache-Reason: XML-Parse-Failed');
+        
         echo file_get_contents($CACHE_FILE);
         exit;
     } else {
@@ -191,4 +217,6 @@ if ($write_result === false) {
 }
 
 // Output
+header('X-Cache-Status: MISS');
+header('X-Cache-Action: Fresh-Fetch');
 echo $json_output;

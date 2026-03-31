@@ -1,0 +1,14 @@
+# Workforce Programs Security Configuration
+# Blocks direct access to .json files while allowing PHP scripts to read them
+
+# Deny direct access to JSON files
+<FilesMatch "\.json$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Optional: Deny access to backup files
+<FilesMatch "\.(bak|backup|old|tmp)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

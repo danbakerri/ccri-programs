@@ -1,0 +1,12 @@
+# Cache Directory Security Configuration
+# Blocks all direct web access to cache files
+# PHP scripts can still read/write from server-side
+
+# Deny all direct access
+Order Allow,Deny
+Deny from all
+
+# Explanation:
+# - Users CANNOT access cache files via browser
+# - PHP scripts CAN still read/write cache files
+# - Only fetch-program-content.php and program-list.php serve cached data

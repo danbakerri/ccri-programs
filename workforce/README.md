@@ -14,7 +14,10 @@ This system allows authorized users to add, edit, and delete workforce programs 
 | **save-program.php** | Handles adding/editing programs |
 | **get-programs.php** | Retrieves program list for display |
 | **delete-program.php** | Handles program deletion |
+| **.htaccess** | Apache security config (blocks direct JSON access) |
+| **web.config** | IIS security config (blocks direct JSON access) |
 | **workforce-programs.json** | Data storage (auto-created) |
+| **README.md** | This file |
 
 ## Installation
 
@@ -29,7 +32,21 @@ Upload to server at `/workforce/manage-programs/`:
   delete-program.php
 ```
 
-### 2. Set Permissions
+### 2. Set Security
+
+**For Apache servers:**
+- Upload `.htaccess` to the same directory
+- This blocks direct access to `.json` files
+
+**For IIS servers:**
+- Upload `web.config` to the same directory  
+- This blocks direct access to `.json` files
+
+**Why:** Prevents anyone from directly accessing `workforce-programs.json` via browser. Only PHP scripts can read it.
+
+See `SECURITY.md` in main repository for complete security setup.
+
+### 3. Set Permissions
 
 The app needs to create/write `workforce-programs.json` in the same directory.
 
