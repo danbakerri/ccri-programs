@@ -6,18 +6,22 @@
 
 /*
  * PATHWAY_MAP — rename or merge pathway categories
- * Key = exact value from the catalog
- * Value = the display name you want
+ * Key = exact value from the catalog (PHP pathway output)
+ * Value = the display name you want shown in the UI
  */
 const PATHWAY_MAP = {
-  'Arts and Humanities': 'Arts & Humanities',
-  'Business Economics and Data Analytics': 'Business, Economics & Data Analytics',
-  'Communication, Media and Film': 'Communication, Media, and Film',
-  'Education, Government, and Human Services': 'Education, Government, and Human Services',
-  'Environment and Sustainability': 'Environment & Sustainability',
-  'Health and Health Administration': 'Health and Health Administration',
+  'Arts and Humanities':                        'Arts & Humanities',
+  'Business Economics and Data Analytics':      'Business, Economics & Data Analytics',
+  'Communication, Media and Film':              'Communication, Media, and Film',
+  'Education, Government, and Human Services':  'Education, Government, and Human Services',
+  'Environment and Sustainability':             'Environment & Sustainability',
+  'Health and Health Administration':           'Health and Health Administration',
   'Science, Technology, Engineering, and Mathematics': 'Science, Technology, Engineering, and Math',
-  'Workforce Partnerships': 'Workforce Partnerships (Non-Degree)'
+  'Workforce Partnerships':                     'Workforce Partnerships (Non-Degree)',
+  // New pathways added April 2026
+  'Community Planning':                         'Education, Government, and Human Services',
+  'Computer Science Cybersecurity':             'Science, Technology, Engineering, and Math',
+  'Culinary Arts':                              'Business, Economics & Data Analytics',
 };
 
 /* Helper function: resolve a raw pathway to its display name */
@@ -29,10 +33,10 @@ function normPathway(raw) {
  * PROGRAM_TYPE_LABELS — friendly display names for program types
  */
 const PROGRAM_TYPE_LABELS = {
-  'assoc': 'Associate Degree',
-  'transfer': 'Transfer Program',
-  'cert': 'Certificate',
-  'dipl': 'Diploma',
+  'assoc':     'Associate Degree',
+  'transfer':  'Transfer Program',
+  'cert':      'Certificate',
+  'dipl':      'Diploma',
   'workforce': 'Workforce Partnerships (Non-Degree)'
 };
 
@@ -46,10 +50,9 @@ const HIDDEN_PROGRAMS = [
 ];
 
 /*
- * PATHWAY_ORDER — control the order pathways appear in filters
- * Programs will be grouped in this order
- * NOTE: "Workforce Partnerships" is intentionally excluded from this list
- * so it does NOT appear in the pathway filter dropdown
+ * PATHWAY_ORDER — control the order pathways appear in the filter dropdown
+ * Pathways not in this list will still appear, just after the ordered ones
+ * NOTE: "Workforce Partnerships (Non-Degree)" is intentionally last
  */
 const PATHWAY_ORDER = [
   'Arts & Humanities',
@@ -66,22 +69,18 @@ const PATHWAY_ORDER = [
 // INDIVIDUAL PROGRAM PAGE AUTO-TRANSFORMATION
 // Automatically runs on program pages to transform labels
 // ═══════════════════════════════════════════════════════════════════
-
 document.addEventListener('DOMContentLoaded', function() {
   // Check if we're on a program page (has .program-type-tag)
   const typeTag = document.querySelector('.program-type-tag');
-  
   if (typeTag) {
     const rawType = typeTag.textContent.trim();
-    const mappedType = PROGRAM_TYPE_LABELS[rawType] || rawType;
-    typeTag.textContent = mappedType;
+    typeTag.textContent = PROGRAM_TYPE_LABELS[rawType] || rawType;
   }
-  
+
   // Transform pathway labels if present
   const pathwayTag = document.querySelector('.program-pathway-tag');
   if (pathwayTag) {
     const rawPathway = pathwayTag.textContent.trim();
-    const mappedPathway = normPathway(rawPathway);
-    pathwayTag.textContent = mappedPathway;
+    pathwayTag.textContent = normPathway(rawPathway);
   }
 });
